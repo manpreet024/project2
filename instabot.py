@@ -40,13 +40,13 @@ def user_by_username(insta_user):
         print "no such user exist"
     return search_result['data'][0]['id']
 
-# user_by_username('shivtaj21')
+user_by_username('manpreet287')
 # get_user_post function is used to get the user's public posts
 
 
 def get_user_post(insta_username):
     insta_user_id = user_by_username(insta_username)
-    request_url = BASE_URL + 'users/'+insta_user_id+'/media/recent/?access_token=' + App_Access_token
+    request_url = BASE_URL + "users/"+insta_user_id+"/media/recent/?access_token=" + App_Access_token
     recent_posts = requests.get(request_url).json()
     x = raw_input("\n press Y to get the id of recent post only:\n press Z to get the id of interestimg post.")
     if x == 'y'or x == 'Y':
@@ -92,6 +92,41 @@ def get_user_post(insta_username):
             else:
                 return recent_posts['data'][0]['id']
 
-get_user_post('api_17790')
+# get_user_post('api_17790')
+
+
+def like_post(insta_username):
+    post_id_user = get_user_post(insta_username)
+    print post_id_user
+    payload = {"access_token": App_Access_token}
+    request_url = BASE_URL+"media/" + str(post_id_user)+"/likes"
+    print request_url
+    response_to_like = requests.post(request_url, payload).json()
+    success = response_to_like['meta']['code']
+    if success == 200:
+        print"post like successfully"
+    else:
+        print"post not liked plz try again"
+        return
+# print response_to_like['meta']['code']
+# like_post('api_17790')
+
+
+def comment_post(insta_username):
+    post_id_user = get_user_post(insta_username)
+    url = BASE_URL+"media/"+str(post_id_user) + "/comments"
+    text = raw_input("enter the comment you want to post")
+    payload = {'access_token': App_Access_token, 'text': text}
+    response = requests.post(url, payload).json()
+    print response
+    if response['meta']['code'] == 200:
+        print"successfully comment"
+    else:
+        print"comment unsuccessfull"
+comment_post('manpreet287')
+
+# https://api.instagram.com/v1/media/{media-id}/likes?access_token=ACCESS-TOKEN
+
+
 
 
